@@ -517,7 +517,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Encabezado con Logo Viejo Carlos -->
     <header class="topbar">
       <div class="brand">
         <div class="logo-badge" aria-label="Logo Viejo Carlos">
@@ -541,7 +540,6 @@
       </div>
     </header>
 
-    <!-- Tarjeta del Formulario -->
     <main class="card">
       <div class="progress-wrap">
         <div class="progress-header">
@@ -636,7 +634,6 @@
       </form>
     </main>
 
-    <!-- Panel de Registros Recientes -->
     <section class="card">
       <div class="records-header">
         <h2>Registros recientes en este equipo (<span id="recordCount">0</span>)</h2>
@@ -653,12 +650,8 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // =========================================================================
-    // 1. PEGA AQUÍ LA URL DE TU GOOGLE APPS SCRIPT (termina en /exec)
-    // =========================================================================
-    const SCRIPT_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0CGP94yjPqNqBGdTmJmNZZoyVKwk9AVvEkY0yiUYHEVfBfboCIIE9S4sVgIXU30T_/exec";
 
-    // Elementos del DOM
     const form = document.getElementById("registroForm");
     const nombresInput = document.getElementById("nombres");
     const apellidosInput = document.getElementById("apellidos");
@@ -678,7 +671,6 @@
 
     const STORAGE_KEY = "viejo_carlos_registros_v1";
 
-    // --- Hora automática de Perú (America/Lima) ---
     function obtenerFechaHoraPeru() {
       const ahora = new Date();
       return new Intl.DateTimeFormat("es-PE", {
@@ -701,7 +693,6 @@
     actualizarReloj();
     setInterval(actualizarReloj, 1000);
 
-    // --- Modo claro / oscuro ---
     const savedTheme = localStorage.getItem("vc_theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
     themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
@@ -714,7 +705,6 @@
       themeToggle.textContent = next === "dark" ? "☀️" : "🌙";
     });
 
-    // --- Barra de progreso en tiempo real ---
     function getSelectedSkills() {
       return Array.from(document.querySelectorAll('input[name="habilidades"]:checked'))
         .map(el => el.value);
@@ -735,7 +725,6 @@
     form.addEventListener("input", actualizarProgreso);
     form.addEventListener("change", actualizarProgreso);
 
-    // --- Notificación Toast ---
     let toastTimer;
     function showToast(msg, type = "success") {
       clearTimeout(toastTimer);
@@ -746,7 +735,6 @@
       }, 3600);
     }
 
-    // --- Respaldo local y tabla ---
     function cargarRegistros() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     }
@@ -756,6 +744,12 @@
       lista.unshift(registro);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
       renderTabla();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
     }
 
     function renderTabla() {
@@ -791,15 +785,8 @@
       `;
     }
 
-    function escapeHtml(text) {
-      const div = document.createElement("div");
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
     renderTabla();
 
-    // --- Exportar CSV ---
     exportCsvBtn.addEventListener("click", () => {
       const lista = cargarRegistros();
       if (!lista.length) {
@@ -825,7 +812,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // --- Botón Limpiar ---
     clearBtn.addEventListener("click", () => {
       form.reset();
       actualizarReloj();
@@ -833,7 +819,6 @@
       showToast("Formulario limpiado.", "warn");
     });
 
-    // --- Envío a Google Sheets ---
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -866,17 +851,34 @@
       submitText.textContent = "Enviando a Google Sheets...";
 
       try {
-        if (!SCRIPT_URL || SCRIPT_URL === "https://script.google.com/macros/s/AKfycbz0HFN9RuimHcNIaMvVhzt5Xd-NfFH5eDMj7rgX4Eivs8LvjRXlsxKDVg-IPTye_Qur/exec") {
-          guardarRegistroLocal(registro);
-          showToast("Guardado localmente. Falta pegar tu SCRIPT_URL.", "warn");
-        } else {
-          const formData = new FormData();
-          formData.append("nombres", registro.nombres);
-          formData.append("apellidos", registro.apellidos);
-          formData.append("carrera", registro.carrera);
-          formData.append("habilidades", registro.habilidades);
-          formData.append("fecha", registro.fecha);
+        const params = new URLSearchParams();
+        params.append("nombres", registro.nombres);
+        params.append("apellidos", registro.apellidos);
+        params.append("carrera", registro.carrera);
+        params.append("habilidades", registro.habilidades);
+        params.append("fecha", registro.fecha);
 
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: params
+        });
+
+        guardarRegistroLocal(registro);
+        showToast("¡Registro enviado a Google Sheets con éxito!", "success");
+
+        form.reset();
+        actualizarReloj();
+        actualizarProgreso();
+      } catch (err) {
+        console.error(err);
+        showToast("Error al conectar con Google Sheets.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("loading");
+        submitText.textContent = "Guardar Registro";
+      }
+    });
+  </script>
+</body>
+</html>
