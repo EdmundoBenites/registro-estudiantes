@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Estudiantes</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #eef2f7; display: flex; justify-content: center; padding: 30px 15px; margin: 0; }
+    .caja { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
+    h2 { text-align: center; color: #1e293b; margin-top: 0; }
+    label { display: block; margin-top: 14px; font-weight: bold; font-size: 14px; color: #334155; }
+    input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+    button { width: 100%; margin-top: 22px; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #94a3b8; }
+    #estado { text-align: center; margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="caja">
+    <h2>Registro de Datos</h2>
+    <form id="miForm">
+      <label>Nombre completo</label>
+      <input type="text" name="Nombre" required>
+
+      <label>Correo electrónico</label>
+      <input type="email" name="Correo" required>
+
+      <label>Teléfono / Celular</label>
+      <input type="tel" name="Telefono" required>
+
+      <label>Mensaje o dato adicional</label>
+      <textarea name="Mensaje" rows="3" required></textarea>
+
+      <button type="submit" id="boton">Enviar datos</button>
+      <div id="estado"></div>
+    </form>
+  </div>
+
+  <script>
+    const URL_GOOGLE = 'https://script.google.com/macros/s/AKfycbxW2dW7w8LLb_w1Bce8-A64etqq09tfu_78-THLQO6Tm1aFi5l0jMP9mZN6OGIy0OkzOQ/exec';
+
+    const form = document.getElementById('miForm');
+    const btn = document.getElementById('boton');
+    const estado = document.getElementById('estado');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      estado.textContent = '';
+
+      fetch(URL_GOOGLE, { method: 'POST', mode: 'no-cors', body: new FormData(form) })
+        .then(() => {
+          estado.style.color = '#16a34a';
+          estado.textContent = '¡Registro enviado con éxito!';
+          form.reset();
+          btn.disabled = false;
+          btn.textContent = 'Enviar datos';
+        })
+        .catch(() => {
+          estado.style.color = '#dc2626';
+          estado.textContent = 'Error de conexión. Intenta de nuevo.';
+          btn.disabled = false;
+          btn.textContent = 'Enviar datos';
+        });
+    });
+  </script>
+</body>
+</html>
