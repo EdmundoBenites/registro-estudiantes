@@ -1,1022 +1,882 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viejo Carlos — Registro de Talento</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viejo Carlos | Registro Interactivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --bg-accent: radial-gradient(circle at 15% 15%, rgba(217, 119, 6, 0.12), transparent 40%),
+                   radial-gradient(circle at 85% 85%, rgba(37, 99, 235, 0.10), transparent 45%);
+      --card: #ffffff;
+      --card-border: #e5e7eb;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --input-bg: #f9fafb;
+      --input-border: #d1d5db;
+      --primary: #b45309;
+      --primary-hover: #92400e;
+      --primary-soft: rgba(180, 83, 9, 0.10);
+      --accent: #2563eb;
+      --success: #059669;
+      --danger: #dc2626;
+      --shadow: 0 20px 45px -15px rgba(17, 24, 39, 0.12);
+      --radius: 18px;
+    }
 
-    <!-- Fuente Inter de Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --bg-accent: radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.14), transparent 40%),
+                   radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.14), transparent 45%);
+      --card: #111827;
+      --card-border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --input-bg: #1f2937;
+      --input-border: #374151;
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --primary-soft: rgba(245, 158, 11, 0.14);
+      --accent: #60a5fa;
+      --success: #10b981;
+      --danger: #f87171;
+      --shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.55);
+    }
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    <!-- Configuración personalizada de Tailwind para modo oscuro y tipografía -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.4s ease-out forwards',
-                        'pop-in': 'popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'shake': 'shake 0.4s ease-in-out',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(12px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        popIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.92)' },
-                            '100%': { opacity: '1', transform: 'scale(1)' },
-                        },
-                        shake: {
-                            '0%, 100%': { transform: 'translateX(0)' },
-                            '20%, 60%': { transform: 'translateX(-5px)' },
-                            '40%, 80%': { transform: 'translateX(5px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      background-image: var(--bg-accent);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 28px 16px 48px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* Header & Logo */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #d97706, #92400e);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 25px -8px rgba(180, 83, 9, 0.55);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .brand-text span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clock-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .theme-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .theme-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    /* Main Card */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Progress Bar */
+    .progress-wrap {
+      margin-bottom: 24px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--input-bg);
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      border-radius: 999px;
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Form Grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-auto {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 12px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+      background: var(--card);
+    }
+
+    input[readonly] {
+      cursor: not-allowed;
+      opacity: 0.9;
+      font-weight: 600;
+    }
+
+    /* Skill Cards */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .skill-option {
+      position: relative;
+    }
+
+    .skill-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .skill-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 12px;
+      border-radius: 14px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .skill-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .skill-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .skill-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .skill-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .skill-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--input-border);
+      display: grid;
+      place-items: center;
+      font-size: 0.72rem;
+      color: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .skill-option input:checked + .skill-card {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 8px 20px -10px rgba(180, 83, 9, 0.5);
+    }
+
+    .skill-option input:checked + .skill-card .skill-check {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 22px;
+      border-radius: 13px;
+      border: none;
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 12px 24px -10px rgba(180, 83, 9, 0.65);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px -10px rgba(180, 83, 9, 0.75);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .btn-secondary {
+      padding: 14px 18px;
+      border-radius: 13px;
+      border: 1.5px solid var(--card-border);
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--input-bg);
+      border-color: var(--text-muted);
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .loading .spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Records Panel */
+    .records-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .records-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 11px 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      background: var(--primary-soft);
+      color: var(--primary);
+      margin: 2px 4px 2px 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px 12px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.28);
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 999;
+      max-width: 340px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success { border-left: 4px solid #10b981; }
+    .toast.error { border-left: 4px solid #ef4444; }
+    .toast.warn { border-left: 4px solid #f59e0b; }
+
+    @media (max-width: 640px) {
+      .form-grid, .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
-<body class="font-sans antialiased bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col overflow-x-hidden">
-
-    <!-- Fondo decorativo sutil -->
-    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-amber-400/15 dark:bg-amber-500/10 blur-3xl"></div>
-        <div class="absolute top-1/2 -left-32 w-96 h-96 rounded-full bg-indigo-400/15 dark:bg-indigo-500/10 blur-3xl"></div>
-    </div>
-
-    <!-- =================================================================== -->
-    <!-- ENCABEZADO / BARRA DE NAVEGACIÓN                                    -->
-    <!-- =================================================================== -->
-    <header class="sticky top-0 z-30 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-            
-            <!-- Logotipo Estilizado de "Viejo Carlos" -->
-            <div class="flex items-center gap-3 select-none">
-                <div class="relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 text-white shadow-lg shadow-amber-500/25 ring-1 ring-amber-400/40 transition-transform duration-300 hover:scale-105">
-                    <!-- Emblema SVG personalizado VC -->
-                    <svg class="w-7 h-7" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <rect x="3" y="3" width="34" height="34" rx="9" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
-                        <path d="M10.5 13.5L16.5 27.5L22.5 13.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M29.5 16C28.4 14.3 26.6 13.5 24.7 13.5C21.5 13.5 19.5 16 19.5 20C19.5 24 21.5 26.5 24.7 26.5C26.7 26.5 28.5 25.6 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-                        <circle cx="29.5" cy="11" r="1.8" fill="#FEF3C7"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">
-                        Viejo <span class="text-amber-600 dark:text-amber-400">Carlos</span>
-                    </span>
-                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">
-                        Portal de Registro &amp; Talento
-                    </span>
-                </div>
-            </div>
-
-            <!-- Controles derechos: Reloj rápido (desktop) + Toggle Claro/Oscuro -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span>Perú:</span>
-                    <span id="header-clock" class="font-semibold tabular-nums text-slate-900 dark:text-white">--:--:--</span>
-                </div>
-
-                <!-- Botón Modo Claro / Oscuro -->
-                <button
-                    id="theme-toggle"
-                    type="button"
-                    aria-label="Cambiar entre modo claro y oscuro"
-                    class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-amber-300 border border-slate-200 dark:border-slate-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
-                >
-                    <!-- Icono Sol (visible en modo oscuro) -->
-                    <svg id="icon-sun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                    </svg>
-                    <!-- Icono Luna (visible en modo claro) -->
-                    <svg id="icon-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-                    </svg>
-                </button>
-            </div>
+<body>
+  <div class="container">
+    <!-- Encabezado con Logo Viejo Carlos -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-badge" aria-label="Logo Viejo Carlos">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 20L24 46L36 20" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M52 24C49.5 21.2 46 20 42.5 20C35.6 20 31 25.2 31 32C31 38.8 35.6 44 42.5 44C46.2 44 49.6 42.6 52 39.8" stroke="#FDE68A" stroke-width="6" stroke-linecap="round"/>
+          </svg>
         </div>
+        <div class="brand-text">
+          <h1>Viejo Carlos</h1>
+          <span>Portal de Registro de Talento</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="clock-pill" title="Hora oficial de Perú (America/Lima)">
+          <span class="pulse-dot"></span>
+          <span id="liveClock">Cargando hora...</span>
+        </div>
+        <button type="button" class="theme-btn" id="themeToggle" title="Cambiar tema">🌙</button>
+      </div>
     </header>
 
-    <!-- =================================================================== -->
-    <!-- CONTENIDO PRINCIPAL                                                 -->
-    <!-- =================================================================== -->
-    <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <!-- Tarjeta del Formulario -->
+    <main class="card">
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <span>Progreso del registro</span>
+          <span id="progressText">0% completado</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
 
-        <!-- Cabecera de Bienvenida -->
-        <div class="mb-8 text-center sm:text-left">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Ficha de Registro Profesional
-            </h1>
-            <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl">
-                Completa tus datos académicos y selecciona tus habilidades informáticas. La fecha y hora se registran automáticamente en horario oficial del Perú.
-            </p>
+      <form id="registroForm" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="nombres">Nombres Completos</label>
+            <input type="text" id="nombres" name="nombres" placeholder="Ej. Carlos Edmundo" required autocomplete="given-name" />
+          </div>
+
+          <div class="field">
+            <label for="apellidos">Apellidos</label>
+            <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Benites Neyra" required autocomplete="family-name" />
+          </div>
+
+          <div class="field full">
+            <label for="carrera">Carrera Universitaria</label>
+            <input type="text" id="carrera" name="carrera" list="carrerasSugeridas" placeholder="Ej. Ingeniería Industrial" required />
+            <datalist id="carrerasSugeridas">
+              <option value="Ingeniería Industrial"></option>
+              <option value="Ingeniería de Sistemas"></option>
+              <option value="Ingeniería de Software"></option>
+              <option value="Ciencia de Datos"></option>
+              <option value="Administración de Empresas"></option>
+              <option value="Economía"></option>
+              <option value="Contabilidad y Finanzas"></option>
+            </datalist>
+          </div>
+
+          <div class="field full">
+            <label>
+              <span>Habilidades Informáticas</span>
+              <span class="badge-auto">Selección múltiple</span>
+            </label>
+            <div class="skills-grid">
+              <label class="skill-option">
+                <input type="checkbox" name="habilidades" value="SQL" />
+                <div class="skill-card">
+                  <span class="skill-check">✓</span>
+                  <span class="skill-icon">🗄️</span>
+                  <span class="skill-name">SQL</span>
+                  <span class="skill-sub">Bases de datos</span>
+                </div>
+              </label>
+
+              <label class="skill-option">
+                <input type="checkbox" name="habilidades" value="EXCEL" />
+                <div class="skill-card">
+                  <span class="skill-check">✓</span>
+                  <span class="skill-icon">📊</span>
+                  <span class="skill-name">EXCEL</span>
+                  <span class="skill-sub">Análisis y tablas</span>
+                </div>
+              </label>
+
+              <label class="skill-option">
+                <input type="checkbox" name="habilidades" value="PYTHON" />
+                <div class="skill-card">
+                  <span class="skill-check">✓</span>
+                  <span class="skill-icon">🐍</span>
+                  <span class="skill-name">PYTHON</span>
+                  <span class="skill-sub">Automatización</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="fechaPeru">
+              <span>Fecha y Hora de Registro (Perú)</span>
+              <span class="badge-auto">Automático · UTC-5</span>
+            </label>
+            <input type="text" id="fechaPeru" name="fecha" readonly />
+          </div>
         </div>
 
-        <!-- Diseño Responsivo de 2 Columnas en Pantallas Grandes -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-            <!-- =========================================================== -->
-            <!-- COLUMNA IZQUIERDA: FORMULARIO INTERACTIVO                   -->
-            <!-- =========================================================== -->
-            <section class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/60 dark:shadow-black/30 border border-slate-200/80 dark:border-slate-800 overflow-hidden transition-colors duration-300">
-
-                <!-- Barra de Progreso en Tiempo Real -->
-                <div class="px-6 sm:px-8 pt-6 pb-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                            Progreso del formulario
-                        </span>
-                        <span id="progress-text" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 transition-colors">
-                            0% completado
-                        </span>
-                    </div>
-                    <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                        <div
-                            id="progress-bar"
-                            class="h-full w-0 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500 ease-out"
-                        ></div>
-                    </div>
-                </div>
-
-                <!-- Banner Animado de Éxito (oculto por defecto) -->
-                <div id="success-banner" class="hidden mx-6 sm:mx-8 mt-6 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 animate-pop-in">
-                    <div class="flex items-start gap-3">
-                        <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/30">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-bold text-emerald-900 dark:text-emerald-300">
-                                ¡Registro guardado exitosamente!
-                            </h3>
-                            <p id="success-banner-msg" class="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
-                                Tus datos han sido añadidos a la base de Viejo Carlos.
-                            </p>
-                        </div>
-                        <button type="button" id="close-success-banner" class="text-emerald-600 dark:text-emerald-400 hover:opacity-75 p-1" aria-label="Cerrar mensaje">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Formulario Principal -->
-                <form id="registro-form" class="p-6 sm:p-8 space-y-6" novalidate>
-
-                    <!-- Fila de Nombres y Apellidos -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <!-- 1. Nombres Completos -->
-                        <div class="space-y-1.5">
-                            <label for="nombres" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Nombres Completos <span class="text-amber-600">*</span>
-                            </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </span>
-                                <input
-                                    type="text"
-                                    id="nombres"
-                                    name="nombres"
-                                    autocomplete="given-name"
-                                    placeholder="Ej. Carlos Alberto"
-                                    class="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all duration-200"
-                                >
-                                <span id="status-nombres" class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none"></span>
-                            </div>
-                            <p id="error-nombres" class="text-xs text-rose-500 font-medium hidden"></p>
-                        </div>
-
-                        <!-- 2. Apellidos -->
-                        <div class="space-y-1.5">
-                            <label for="apellidos" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Apellidos <span class="text-amber-600">*</span>
-                            </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                </span>
-                                <input
-                                    type="text"
-                                    id="apellidos"
-                                    name="apellidos"
-                                    autocomplete="family-name"
-                                    placeholder="Ej. Mendoza Quispe"
-                                    class="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all duration-200"
-                                >
-                                <span id="status-apellidos" class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none"></span>
-                            </div>
-                            <p id="error-apellidos" class="text-xs text-rose-500 font-medium hidden"></p>
-                        </div>
-                    </div>
-
-                    <!-- 3. Carrera Universitaria (con sugerencias datalist) -->
-                    <div class="space-y-1.5">
-                        <label for="carrera" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            Carrera Universitaria <span class="text-amber-600">*</span>
-                        </label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                </svg>
-                            </span>
-                            <input
-                                type="text"
-                                id="carrera"
-                                name="carrera"
-                                list="carreras-sugeridas"
-                                placeholder="Escribe o elige tu carrera (Ej. Ingeniería de Sistemas)"
-                                class="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all duration-200"
-                            >
-                            <span id="status-carrera" class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none"></span>
-
-                            <!-- Lista de sugerencias de carreras universitarias -->
-                            <datalist id="carreras-sugeridas">
-                                <option value="Ingeniería de Sistemas"></option>
-                                <option value="Ingeniería Industrial"></option>
-                                <option value="Ingeniería de Software"></option>
-                                <option value="Ciencia de Datos"></option>
-                                <option value="Administración de Empresas"></option>
-                                <option value="Contabilidad y Finanzas"></option>
-                                <option value="Economía"></option>
-                                <option value="Estadística"></option>
-                                <option value="Marketing y Negocios Internacionales"></option>
-                                <option value="Ingeniería Civil"></option>
-                                <option value="Ingeniería Mecatrónica"></option>
-                                <option value="Ingeniería Electrónica"></option>
-                                <option value="Derecho"></option>
-                                <option value="Psicología"></option>
-                                <option value="Arquitectura"></option>
-                            </datalist>
-                        </div>
-                        <p id="error-carrera" class="text-xs text-rose-500 font-medium hidden"></p>
-                    </div>
-
-                    <!-- 4. Habilidades Informáticas (Selección Múltiple Interactiva) -->
-                    <div class="space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Habilidades Informáticas <span class="text-amber-600">*</span>
-                            </label>
-                            <span id="skills-counter" class="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                Selecciona una o más opciones
-                            </span>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" role="group" aria-label="Habilidades Informáticas">
-                            <!-- Tarjeta SQL -->
-                            <label class="skill-card group relative cursor-pointer select-none">
-                                <input type="checkbox" name="habilidades" value="SQL" class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/60 hover:border-blue-400/70 dark:hover:border-blue-500/60 peer-checked:border-blue-600 dark:peer-checked:border-blue-400 peer-checked:bg-blue-50/80 dark:peer-checked:bg-blue-500/15 peer-focus-visible:ring-2 peer-focus-visible:ring-blue-500 transition-all duration-200 flex sm:flex-col items-center sm:items-start gap-3.5 sm:gap-2.5 active:scale-[0.98]">
-                                    <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                                        <!-- Icono Base de Datos SQL -->
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="font-bold text-sm text-slate-900 dark:text-white">SQL</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">Bases de datos</div>
-                                    </div>
-                                    <!-- Indicador Check -->
-                                    <div class="check-badge sm:absolute sm:top-3 sm:right-3 w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center transition-all duration-200">
-                                        <svg class="w-3 h-3 text-white opacity-0 transition-opacity duration-200" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <!-- Tarjeta EXCEL -->
-                            <label class="skill-card group relative cursor-pointer select-none">
-                                <input type="checkbox" name="habilidades" value="EXCEL" class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/60 hover:border-emerald-400/70 dark:hover:border-emerald-500/60 peer-checked:border-emerald-600 dark:peer-checked:border-emerald-400 peer-checked:bg-emerald-50/80 dark:peer-checked:bg-emerald-500/15 peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-500 transition-all duration-200 flex sm:flex-col items-center sm:items-start gap-3.5 sm:gap-2.5 active:scale-[0.98]">
-                                    <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                                        <!-- Icono Hoja de Cálculo Excel -->
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                                            <path d="M3 9h18M3 15h18M9 3v18"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="font-bold text-sm text-slate-900 dark:text-white">EXCEL</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">Hojas &amp; Macros</div>
-                                    </div>
-                                    <div class="check-badge sm:absolute sm:top-3 sm:right-3 w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center transition-all duration-200">
-                                        <svg class="w-3 h-3 text-white opacity-0 transition-opacity duration-200" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <!-- Tarjeta PYTHON -->
-                            <label class="skill-card group relative cursor-pointer select-none">
-                                <input type="checkbox" name="habilidades" value="PYTHON" class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/60 hover:border-amber-400/70 dark:hover:border-amber-500/60 peer-checked:border-amber-600 dark:peer-checked:border-amber-400 peer-checked:bg-amber-50/80 dark:peer-checked:bg-amber-500/15 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500 transition-all duration-200 flex sm:flex-col items-center sm:items-start gap-3.5 sm:gap-2.5 active:scale-[0.98]">
-                                    <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                                        <!-- Icono Código Python -->
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <polyline points="16 18 22 12 16 6"></polyline>
-                                            <polyline points="8 6 2 12 8 18"></polyline>
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="font-bold text-sm text-slate-900 dark:text-white">PYTHON</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">Código &amp; Datos</div>
-                                    </div>
-                                    <div class="check-badge sm:absolute sm:top-3 sm:right-3 w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center transition-all duration-200">
-                                        <svg class="w-3 h-3 text-white opacity-0 transition-opacity duration-200" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                        <p id="error-habilidades" class="text-xs text-rose-500 font-medium hidden"></p>
-                    </div>
-
-                    <!-- 5. Fecha y Hora Automática (Perú - America/Lima UTC-5) -->
-                    <div class="space-y-1.5">
-                        <div class="flex items-center justify-between">
-                            <label for="fecha-peru" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Fecha y Hora (Perú)
-                            </label>
-                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Automática · UTC-5
-                            </span>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amber-600 dark:text-amber-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                            </span>
-                            <input
-                                type="text"
-                                id="fecha-peru"
-                                name="fechaPeru"
-                                readonly
-                                aria-readonly="true"
-                                value="Sincronizando hora de Perú..."
-                                class="w-full pl-10 pr-24 py-3 rounded-xl bg-slate-100/90 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-sm font-medium tabular-nums text-slate-700 dark:text-slate-200 cursor-default focus:outline-none"
-                            >
-                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
-                                    America/Lima
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Botones de Acción -->
-                    <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        <button
-                            type="submit"
-                            id="submit-btn"
-                            class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span>Registrar Datos</span>
-                        </button>
-
-                        <button
-                            type="button"
-                            id="reset-btn"
-                            class="px-5 py-3.5 rounded-xl font-semibold text-sm text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400/50"
-                        >
-                            Limpiar
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- =========================================================== -->
-            <!-- COLUMNA DERECHA: LISTA EN VIVO DE REGISTROS (localStorage)  -->
-            <!-- =========================================================== -->
-            <aside class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/60 dark:shadow-black/30 border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col transition-colors duration-300">
-
-                <!-- Encabezado del Panel de Registros -->
-                <div class="p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 flex flex-wrap items-center justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <h2 class="text-base font-bold text-slate-900 dark:text-white">
-                            Registros Guardados
-                        </h2>
-                        <span id="records-count" class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300">
-                            0
-                        </span>
-                    </div>
-
-                    <!-- Botón Exportar CSV -->
-                    <button
-                        type="button"
-                        id="export-csv-btn"
-                        disabled
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white shadow-sm transition-all duration-200 active:scale-95 disabled:cursor-not-allowed"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        <span>Exportar CSV</span>
-                    </button>
-                </div>
-
-                <!-- Contenedor de la Lista de Registros -->
-                <div id="records-list" class="p-5 sm:p-6 space-y-3.5 max-h-[560px] overflow-y-auto">
-                    <!-- Los registros se renderizan dinámicamente con JavaScript -->
-                </div>
-            </aside>
+        <div class="actions">
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span class="spinner"></span>
+            <span id="submitText">Guardar Registro</span>
+          </button>
+          <button type="button" class="btn-secondary" id="clearBtn">Limpiar</button>
         </div>
+      </form>
     </main>
 
-    <!-- =================================================================== -->
-    <!-- PIE DE PÁGINA                                                       -->
-    <!-- =================================================================== -->
-    <footer class="mt-auto py-6 border-t border-slate-200/70 dark:border-slate-800/70 text-center text-xs text-slate-500 dark:text-slate-400">
-        <div class="max-w-6xl mx-auto px-4">
-            &copy; <span id="footer-year"></span> <strong class="text-slate-700 dark:text-slate-200">Viejo Carlos</strong>. Todos los derechos reservados · Datos almacenados localmente en tu navegador.
-        </div>
-    </footer>
-
-    <!-- Contenedor de Notificaciones Toast -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-[calc(100%-2.5rem)] pointer-events-none"></div>
-
-    <!-- =================================================================== -->
-    <!-- LÓGICA INTERACTIVA EN JAVASCRIPT                                    -->
-    <!-- =================================================================== -->
-    <script>
-        (function () {
-            'use strict';
-
-            // ===============================================================
-            // 1. CONSTANTES Y REFERENCIAS AL DOM
-            // ===============================================================
-            const STORAGE_KEY = 'viejo_carlos_registros_v1';
-            const THEME_KEY = 'viejo_carlos_theme';
-
-            const form = document.getElementById('registro-form');
-            const inputNombres = document.getElementById('nombres');
-            const inputApellidos = document.getElementById('apellidos');
-            const inputCarrera = document.getElementById('carrera');
-            const inputFechaPeru = document.getElementById('fecha-peru');
-            const skillCheckboxes = Array.from(document.querySelectorAll('input[name="habilidades"]'));
-
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const skillsCounter = document.getElementById('skills-counter');
-            const headerClock = document.getElementById('header-clock');
-
-            const successBanner = document.getElementById('success-banner');
-            const successBannerMsg = document.getElementById('success-banner-msg');
-            const closeSuccessBannerBtn = document.getElementById('close-success-banner');
-
-            const recordsList = document.getElementById('records-list');
-            const recordsCount = document.getElementById('records-count');
-            const exportCsvBtn = document.getElementById('export-csv-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const toastContainer = document.getElementById('toast-container');
-
-            // Estado de campos tocados para validación en tiempo real amigable
-            const touched = {
-                nombres: false,
-                apellidos: false,
-                carrera: false,
-                habilidades: false
-            };
-
-            // ID del registro que está esperando confirmación de eliminación
-            let pendingDeleteId = null;
-
-            // ===============================================================
-            // 2. GESTIÓN DE TEMA CLARO / OSCURO
-            // ===============================================================
-            function initTheme() {
-                try {
-                    const savedTheme = localStorage.getItem(THEME_KEY);
-                    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                        document.documentElement.classList.add('dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                    }
-                } catch (err) {
-                    console.warn('No se pudo leer la preferencia de tema:', err);
-                }
-            }
-
-            themeToggleBtn.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                try {
-                    localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
-                } catch (err) {
-                    console.warn('No se pudo guardar la preferencia de tema:', err);
-                }
-            });
-
-            // ===============================================================
-            // 3. RELOJ EN VIVO EN HORA DE PERÚ (America/Lima, UTC-5)
-            // ===============================================================
-            function getPeruDateTimeStrings() {
-                const now = new Date();
-                try {
-                    const fullFormatter = new Intl.DateTimeFormat('es-PE', {
-                        timeZone: 'America/Lima',
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: true
-                    });
-
-                    const timeFormatter = new Intl.DateTimeFormat('es-PE', {
-                        timeZone: 'America/Lima',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false
-                    });
-
-                    return {
-                        full: fullFormatter.format(now),
-                        timeOnly: timeFormatter.format(now),
-                        year: new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', year: 'numeric' }).format(now)
-                    };
-                } catch (err) {
-                    // Fallback manual UTC-5 en caso de navegadores muy antiguos
-                    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-                    const peruDate = new Date(utc - (5 * 3600000));
-                    return {
-                        full: peruDate.toLocaleString('es-PE'),
-                        timeOnly: peruDate.toLocaleTimeString('es-PE'),
-                        year: String(peruDate.getFullYear())
-                    };
-                }
-            }
-
-            function updatePeruClock() {
-                const { full, timeOnly, year } = getPeruDateTimeStrings();
-                inputFechaPeru.value = full;
-                if (headerClock) headerClock.textContent = timeOnly;
-                const footerYear = document.getElementById('footer-year');
-                if (footerYear && !footerYear.textContent) footerYear.textContent = year;
-            }
-
-            // ===============================================================
-            // 4. VALIDACIÓN EN TIEMPO REAL Y BARRA DE PROGRESO
-            // ===============================================================
-            const ICON_VALID = `
-                <svg class="w-4 h-4 text-emerald-500 animate-pop-in" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                </svg>`;
-            const ICON_INVALID = `
-                <svg class="w-4 h-4 text-rose-500 animate-pop-in" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>`;
-
-            function validateTextField(inputEl, fieldKey, labelName) {
-                const value = inputEl.value.trim();
-                const errorEl = document.getElementById(`error-${fieldKey}`);
-                const statusEl = document.getElementById(`status-${fieldKey}`);
-
-                let errorMsg = '';
-                if (!value) {
-                    errorMsg = `Por favor ingresa tus ${labelName}.`;
-                } else if (value.length < 2) {
-                    errorMsg = `Debe tener al menos 2 caracteres.`;
-                } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.'-]+$/.test(value)) {
-                    errorMsg = `Usa solo letras y caracteres válidos.`;
-                }
-
-                const isValid = errorMsg === '';
-
-                // Mostrar estilos solo si el usuario ya interactuó con el campo
-                if (touched[fieldKey]) {
-                    if (isValid) {
-                        inputEl.classList.remove('border-rose-400', 'dark:border-rose-500', 'focus:ring-rose-500/30');
-                        inputEl.classList.add('border-emerald-400', 'dark:border-emerald-500/70');
-                        errorEl.classList.add('hidden');
-                        statusEl.innerHTML = ICON_VALID;
-                    } else {
-                        inputEl.classList.remove('border-emerald-400', 'dark:border-emerald-500/70');
-                        inputEl.classList.add('border-rose-400', 'dark:border-rose-500', 'focus:ring-rose-500/30');
-                        errorEl.textContent = errorMsg;
-                        errorEl.classList.remove('hidden');
-                        statusEl.innerHTML = ICON_INVALID;
-                    }
-                } else {
-                    inputEl.classList.remove('border-rose-400', 'dark:border-rose-500', 'border-emerald-400', 'dark:border-emerald-500/70');
-                    errorEl.classList.add('hidden');
-                    statusEl.innerHTML = '';
-                }
-
-                return isValid;
-            }
-
-            function getSelectedSkills() {
-                return skillCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
-            }
-
-            function updateSkillCardVisuals() {
-                const colorMap = {
-                    SQL: 'bg-blue-600 border-blue-600 dark:bg-blue-500 dark:border-blue-500',
-                    EXCEL: 'bg-emerald-600 border-emerald-600 dark:bg-emerald-500 dark:border-emerald-500',
-                    PYTHON: 'bg-amber-600 border-amber-600 dark:bg-amber-500 dark:border-amber-500'
-                };
-
-                skillCheckboxes.forEach(cb => {
-                    const card = cb.closest('.skill-card');
-                    const badge = card.querySelector('.check-badge');
-                    const checkSvg = badge.querySelector('svg');
-                    const activeClasses = colorMap[cb.value].split(' ');
-
-                    if (cb.checked) {
-                        badge.classList.remove('border-slate-300', 'dark:border-slate-600');
-                        badge.classList.add(...activeClasses);
-                        checkSvg.classList.remove('opacity-0');
-                        checkSvg.classList.add('opacity-100');
-                    } else {
-                        badge.classList.remove(...activeClasses);
-                        badge.classList.add('border-slate-300', 'dark:border-slate-600');
-                        checkSvg.classList.remove('opacity-100');
-                        checkSvg.classList.add('opacity-0');
-                    }
-                });
-
-                const selected = getSelectedSkills();
-                const errorEl = document.getElementById('error-habilidades');
-
-                if (selected.length === 0) {
-                    skillsCounter.textContent = 'Selecciona una o más opciones';
-                    if (touched.habilidades) {
-                        errorEl.textContent = 'Selecciona al menos una habilidad informática.';
-                        errorEl.classList.remove('hidden');
-                    }
-                } else {
-                    skillsCounter.textContent = `${selected.length} seleccionada${selected.length > 1 ? 's' : ''}`;
-                    errorEl.classList.add('hidden');
-                }
-
-                return selected.length > 0;
-            }
-
-            function updateProgress() {
-                const validNombres = validateTextField(inputNombres, 'nombres', 'nombres completos');
-                const validApellidos = validateTextField(inputApellidos, 'apellidos', 'apellidos');
-                const validCarrera = validateTextField(inputCarrera, 'carrera', 'carrera universitaria');
-                const validSkills = updateSkillCardVisuals();
-
-                const completedCount = [validNombres, validApellidos, validCarrera, validSkills].filter(Boolean).length;
-                const percent = Math.round((completedCount / 4) * 100);
-
-                progressBar.style.width = `${percent}%`;
-                progressText.textContent = `${percent}% completado`;
-
-                if (percent === 100) {
-                    progressBar.className = 'h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500 ease-out';
-                    progressText.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 transition-colors';
-                } else {
-                    progressBar.className = 'h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500 ease-out';
-                    progressText.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 transition-colors';
-                }
-
-                return { validNombres, validApellidos, validCarrera, validSkills };
-            }
-
-            // Listeners en tiempo real para inputs
-            [
-                { el: inputNombres, key: 'nombres' },
-                { el: inputApellidos, key: 'apellidos' },
-                { el: inputCarrera, key: 'carrera' }
-            ].forEach(({ el, key }) => {
-                el.addEventListener('input', () => {
-                    touched[key] = true;
-                    updateProgress();
-                });
-                el.addEventListener('blur', () => {
-                    touched[key] = true;
-                    updateProgress();
-                });
-            });
-
-            skillCheckboxes.forEach(cb => {
-                cb.addEventListener('change', () => {
-                    touched.habilidades = true;
-                    updateProgress();
-                });
-            });
-
-            // ===============================================================
-            // 5. NOTIFICACIONES TOAST (Sin usar alert())
-            // ===============================================================
-            function showToast(message, type = 'success') {
-                const styles = {
-                    success: 'bg-slate-900 dark:bg-slate-800 text-white border-emerald-500/40',
-                    error: 'bg-rose-600 text-white border-rose-400/40',
-                    info: 'bg-slate-900 dark:bg-slate-800 text-white border-amber-500/40'
-                };
-
-                const icon = type === 'error'
-                    ? `<svg class="w-4 h-4 text-rose-200 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
-                    : `<svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
-
-                const toast = document.createElement('div');
-                toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-medium animate-fade-in-up ${styles[type] || styles.info}`;
-                toast.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
-
-                toastContainer.appendChild(toast);
-
-                setTimeout(() => {
-                    toast.classList.add('opacity-0', 'translate-y-2', 'transition-all', 'duration-300');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3200);
-            }
-
-            // ===============================================================
-            // 6. ALMACENAMIENTO EN LOCALSTORAGE Y RENDERIZADO DE REGISTROS
-            // ===============================================================
-            function loadRecords() {
-                try {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    const parsed = raw ? JSON.parse(raw) : [];
-                    return Array.isArray(parsed) ? parsed : [];
-                } catch (err) {
-                    console.error('Error al cargar registros:', err);
-                    return [];
-                }
-            }
-
-            function saveRecords(records) {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-                } catch (err) {
-                    console.error('Error al guardar registros:', err);
-                    showToast('No se pudo guardar en el navegador.', 'error');
-                }
-            }
-
-            function escapeHtml(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            function getSkillBadgeHtml(skill) {
-                const badgeStyles = {
-                    SQL: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300',
-                    EXCEL: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300',
-                    PYTHON: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300'
-                };
-                const cls = badgeStyles[skill] || 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200';
-                return `<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold tracking-wide ${cls}">${escapeHtml(skill)}</span>`;
-            }
-
-            function renderRecords() {
-                const records = loadRecords();
-                recordsCount.textContent = records.length;
-                exportCsvBtn.disabled = records.length === 0;
-
-                if (records.length === 0) {
-                    recordsList.innerHTML = `
-                        <div class="py-12 px-4 text-center">
-                            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                Aún no hay registros
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                Completa el formulario para ver aquí tus envíos guardados en tiempo real.
-                            </p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                recordsList.innerHTML = records.map(rec => {
-                    const isConfirming = pendingDeleteId === rec.id;
-                    const skillsHtml = rec.habilidades.map(getSkillBadgeHtml).join('');
-
-                    return `
-                        <article class="p-4 rounded-2xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 hover:border-amber-400/50 dark:hover:border-amber-500/40 transition-all duration-200 animate-fade-in-up">
-                            <div class="flex items-start justify-between gap-2">
-                                <div class="min-w-0">
-                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white truncate">
-                                        ${escapeHtml(rec.nombres)} ${escapeHtml(rec.apellidos)}
-                                    </h3>
-                                    <p class="text-xs font-medium text-slate-600 dark:text-slate-400 mt-0.5 truncate">
-                                        ${escapeHtml(rec.carrera)}
-                                    </p>
-                                </div>
-
-                                <!-- Control de eliminación con confirmación inline (sin confirm()) -->
-                                ${isConfirming ? `
-                                    <div class="flex items-center gap-1.5 flex-shrink-0">
-                                        <button type="button" data-action="confirm-delete" data-id="${rec.id}" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white transition-colors">
-                                            Eliminar
-                                        </button>
-                                        <button type="button" data-action="cancel-delete" class="px-2 py-1 rounded-lg text-[11px] font-semibold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:opacity-80 transition-opacity">
-                                            No
-                                        </button>
-                                    </div>
-                                ` : `
-                                    <button type="button" data-action="ask-delete" data-id="${rec.id}" title="Eliminar registro" aria-label="Eliminar registro" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors flex-shrink-0">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                `}
-                            </div>
-
-                            <div class="flex flex-wrap gap-1.5 mt-3">
-                                ${skillsHtml}
-                            </div>
-
-                            <div class="mt-3 pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 tabular-nums">
-                                <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span>${escapeHtml(rec.fechaPeru)} (Perú)</span>
-                            </div>
-                        </article>
-                    `;
-                }).join('');
-            }
-
-            // Delegación de eventos para eliminar registros
-            recordsList.addEventListener('click', (e) => {
-                const btn = e.target.closest('button[data-action]');
-                if (!btn) return;
-
-                const action = btn.dataset.action;
-                const id = btn.dataset.id;
-
-                if (action === 'ask-delete') {
-                    pendingDeleteId = id;
-                    renderRecords();
-                } else if (action === 'cancel-delete') {
-                    pendingDeleteId = null;
-                    renderRecords();
-                } else if (action === 'confirm-delete') {
-                    const updated = loadRecords().filter(r => r.id !== id);
-                    saveRecords(updated);
-                    pendingDeleteId = null;
-                    renderRecords();
-                    showToast('Registro eliminado.', 'info');
-                }
-            });
-
-            // ===============================================================
-            // 7. ENVÍO Y REINICIO DEL FORMULARIO
-            // ===============================================================
-            function resetFormState() {
-                form.reset();
-                touched.nombres = false;
-                touched.apellidos = false;
-                touched.carrera = false;
-                touched.habilidades = false;
-                updatePeruClock();
-                updateProgress();
-            }
-
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                // Marcar todos los campos como tocados para revelar cualquier error
-                touched.nombres = true;
-                touched.apellidos = true;
-                touched.carrera = true;
-                touched.habilidades = true;
-
-                const { validNombres, validApellidos, validCarrera, validSkills } = updateProgress();
-
-                if (!validNombres || !validApellidos || !validCarrera || !validSkills) {
-                    form.classList.remove('animate-shake');
-                    void form.offsetWidth; // Reiniciar animación
-                    form.classList.add('animate-shake');
-                    showToast('Por favor completa todos los campos requeridos.', 'error');
-                    return;
-                }
-
-                // Capturar la hora exacta de Perú en el momento del envío
-                const { full: fechaExactaPeru } = getPeruDateTimeStrings();
-
-                const newRecord = {
-                    id: 'vc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-                    nombres: inputNombres.value.trim(),
-                    apellidos: inputApellidos.value.trim(),
-                    carrera: inputCarrera.value.trim(),
-                    habilidades: getSelectedSkills(),
-                    fechaPeru: fechaExactaPeru
-                };
-
-                const records = loadRecords();
-                records.unshift(newRecord);
-                saveRecords(records);
-                renderRecords();
-
-                // Mostrar estado de éxito animado
-                successBannerMsg.textContent = `${newRecord.nombres} ${newRecord.apellidos} fue registrado el ${newRecord.fechaPeru}.`;
-                successBanner.classList.remove('hidden');
-                showToast('¡Datos registrados en Viejo Carlos!', 'success');
-
-                resetFormState();
-            });
-
-            resetBtn.addEventListener('click', () => {
-                resetFormState();
-                successBanner.classList.add('hidden');
-                showToast('Formulario limpiado.', 'info');
-            });
-
-            closeSuccessBannerBtn.addEventListener('click', () => {
-                successBanner.classList.add('hidden');
-            });
-
-            // ===============================================================
-            // 8. EXPORTAR REGISTROS A CSV (Compatible con Excel y tildes UTF-8)
-            // ===============================================================
-            exportCsvBtn.addEventListener('click', () => {
-                const records = loadRecords();
-                if (records.length === 0) return;
-
-                try {
-                    const headers = ['Nombres Completos', 'Apellidos', 'Carrera Universitaria', 'Habilidades Informáticas', 'Fecha y Hora (Perú)'];
-                    const escapeCsvCell = (val) => `"${String(val).replace(/"/g, '""')}"`;
-
-                    const rows = records.map(r => [
-                        r.nombres,
-                        r.apellidos,
-                        r.carrera,
-                        r.habilidades.join(' | '),
-                        r.fechaPeru
-                    ].map(escapeCsvCell).join(','));
-
-                    // \uFEFF (BOM UTF-8) asegura que Microsoft Excel muestre correctamente tildes y la ñ
-                    const csvContent = '\uFEFF' + [headers.map(escapeCsvCell).join(','), ...rows].join('\r\n');
-                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `viejo_carlos_registros_${new Date().toISOString().slice(0, 10)}.csv`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-
-                    showToast(`Se exportaron ${records.length} registro(s) a CSV.`, 'success');
-                } catch (err) {
-                    console.error('Error al exportar CSV:', err);
-                    showToast('Ocurrió un error al exportar el archivo.', 'error');
-                }
-            });
-
-            // ===============================================================
-            // 9. INICIALIZACIÓN AL CARGAR LA PÁGINA
-            // ===============================================================
-            initTheme();
-            updatePeruClock();
-            setInterval(updatePeruClock, 1000);
-            updateProgress();
-            renderRecords();
-        })();
-    </script>
-</body>
-</html>
+    <!-- Panel de Registros Recientes -->
+    <section class="card">
+      <div class="records-header">
+        <h2>Registros recientes en este equipo (<span id="recordCount">0</span>)</h2>
+        <button type="button" class="btn-secondary" id="exportCsvBtn" style="padding: 8px 14px; font-size: 0.82rem;">
+          Descargar CSV
+        </button>
+      </div>
+      <div class="table-wrap" id="recordsContainer">
+        <div class="empty-state">Aún no hay registros guardados en esta sesión.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // =========================================================================
+    // 1. PEGA AQUÍ LA URL DE TU GOOGLE APPS SCRIPT (termina en /exec)
+    // =========================================================================
+    const SCRIPT_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+    // Elementos del DOM
+    const form = document.getElementById("registroForm");
+    const nombresInput = document.getElementById("nombres");
+    const apellidosInput = document.getElementById("apellidos");
+    const carreraInput = document.getElementById("carrera");
+    const fechaInput = document.getElementById("fechaPeru");
+    const liveClock = document.getElementById("liveClock");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitText = document.getElementById("submitText");
+    const clearBtn = document.getElementById("clearBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const recordsContainer = document.getElementById("recordsContainer");
+    const recordCount = document.getElementById("recordCount");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const toast = document.getElementById("toast");
+
+    const STORAGE_KEY = "viejo_carlos_registros_v1";
+
+    // --- Hora automática de Perú (America/Lima) ---
+    function obtenerFechaHoraPeru() {
+      const ahora = new Date();
+      return new Intl.DateTimeFormat("es-PE", {
+        timeZone: "America/Lima",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(ahora);
+    }
+
+    function actualizarReloj() {
+      const fechaStr = obtenerFechaHoraPeru();
+      fechaInput.value = fechaStr;
+      liveClock.textContent = "Perú · " + fechaStr;
+    }
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+
+    // --- Modo claro / oscuro ---
+    const savedTheme = localStorage.getItem("vc_theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+
+    themeToggle.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("vc_theme", next);
+      themeToggle.textContent = next === "dark" ? "☀️" : "🌙";
+    });
+
+    // --- Barra de progreso en tiempo real ---
+    function getSelectedSkills() {
+      return Array.from(document.querySelectorAll('input[name="habilidades"]:checked'))
+        .map(el => el.value);
+    }
+
+    function actualizarProgreso() {
+      let completados = 0;
+      if (nombresInput.value.trim().length >= 2) completados++;
+      if (apellidosInput.value.trim().length >= 2) completados++;
+      if (carreraInput.value.trim().length >= 2) completados++;
+      if (getSelectedSkills().length > 0) completados++;
+
+      const porcentaje = Math.round((completados / 4) * 100);
+      progressBar.style.width = porcentaje + "%";
+      progressText.textContent = porcentaje + "% completado";
+    }
+
+    form.addEventListener("input", actualizarProgreso);
+    form.addEventListener("change", actualizarProgreso);
+
+    // --- Notificación Toast ---
+    let toastTimer;
+    function showToast(msg, type = "success") {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.className = "toast show " + type;
+      toastTimer = setTimeout(() => {
+        toast.className = "toast";
+      }, 3600);
+    }
+
+    // --- Respaldo local y tabla ---
+    function cargarRegistros() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function guardarRegistroLocal(registro) {
+      const lista = cargarRegistros();
+      lista.unshift(registro);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+      renderTabla();
+    }
+
+    function renderTabla() {
+      const lista = cargarRegistros();
+      recordCount.textContent = lista.length;
+
+      if (lista.length === 0) {
+        recordsContainer.innerHTML = '<div class="empty-state">Aún no hay registros guardados en esta sesión.</div>';
+        return;
+      }
+
+      const filas = lista.map(r => `
+        <tr>
+          <td><strong>${escapeHtml(r.nombres)} ${escapeHtml(r.apellidos)}</strong></td>
+          <td>${escapeHtml(r.carrera)}</td>
+          <td>${r.habilidades.split(", ").map(h => `<span class="tag">${escapeHtml(h)}</span>`).join("")}</td>
+          <td>${escapeHtml(r.fecha)}</td>
+        </tr>
+      `).join("");
+
+      recordsContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre y Apellidos</th>
+              <th>Carrera</th>
+              <th>Habilidades</th>
+              <th>Fecha (Perú)</th>
+            </tr>
+          </thead>
+          <tbody>${filas}</tbody>
+        </table>
+      `;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    renderTabla();
+
+    // --- Exportar CSV ---
+    exportCsvBtn.addEventListener("click", () => {
+      const lista = cargarRegistros();
+      if (!lista.length) {
+        showToast("No hay registros para exportar.", "warn");
+        return;
+      }
+      const headers = ["Nombres Completos", "Apellidos", "Carrera Universitaria", "Habilidades", "Fecha Peru"];
+      const rows = lista.map(r => [
+        `"${r.nombres.replace(/"/g, '""')}"`,
+        `"${r.apellidos.replace(/"/g, '""')}"`,
+        `"${r.carrera.replace(/"/g, '""')}"`,
+        `"${r.habilidades.replace(/"/g, '""')}"`,
+        `"${r.fecha.replace(/"/g, '""')}"`
+      ].join(","));
+
+      const csv = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "registros_viejo_carlos.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // --- Botón Limpiar ---
+    clearBtn.addEventListener("click", () => {
+      form.reset();
+      actualizarReloj();
+      actualizarProgreso();
+      showToast("Formulario limpiado.", "warn");
+    });
+
+    // --- Envío a Google Sheets ---
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nombres = nombresInput.value.trim();
+      const apellidos = apellidosInput.value.trim();
+      const carrera = carreraInput.value.trim();
+      const habilidadesArr = getSelectedSkills();
+      const fecha = obtenerFechaHoraPeru();
+
+      if (!nombres || !apellidos || !carrera) {
+        showToast("Completa Nombres, Apellidos y Carrera.", "error");
+        return;
+      }
+
+      if (habilidadesArr.length === 0) {
+        showToast("Marca al menos una habilidad (SQL, EXCEL o PYTHON).", "error");
+        return;
+      }
+
+      const registro = {
+        nombres,
+        apellidos,
+        carrera,
+        habilidades: habilidadesArr.join(", "),
+        fecha
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add("loading");
+      submitText.textContent = "Enviando a Google Sheets...";
+
+      try {
+        if (!SCRIPT_URL || SCRIPT_URL === "https://script.google.com/macros/s/AKfycbz0HFN9RuimHcNIaMvVhzt5Xd-NfFH5eDMj7rgX4Eivs8LvjRXlsxKDVg-IPTye_Qur/exec") {
+          guardarRegistroLocal(registro);
+          showToast("Guardado localmente. Falta pegar tu SCRIPT_URL.", "warn");
+        } else {
+          const formData = new FormData();
+          formData.append("nombres", registro.nombres);
+          formData.append("apellidos", registro.apellidos);
+          formData.append("carrera", registro.carrera);
+          formData.append("habilidades", registro.habilidades);
+          formData.append("fecha", registro.fecha);
+
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
